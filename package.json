@@ -1,4 +1,58 @@
 {
   "name": "flow-date",
-  "packageManager": "yarn@4.9.1"
+  "version": "0.0.0",
+  "description": "Javascript date wrapper",
+  "keywords": [
+    "date"
+  ],
+  "bugs": {
+    "url": "https://github.com/the-new-kim/flow-date/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-new-kim/flow-date.git"
+  },
+  "license": "MIT",
+  "author": "Hyeongjong Kim",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "prettier --write .",
+    "lint": "eslint . --fix",
+    "prepack": "yarn build",
+    "prepublishOnly": "yarn lint && yarn test",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^22.15.19",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-package-json": "^0.31.0",
+    "jsonc-eslint-parser": "^2.4.0",
+    "prettier": "^3.5.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.1.3"
+  },
+  "packageManager": "yarn@4.9.1",
+  "publishConfig": {
+    "access": "public"
+  }
 }
