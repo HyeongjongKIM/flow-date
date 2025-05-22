@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { isValidDate } from './is-valid-date';
 
 describe('isValidDate', () => {
