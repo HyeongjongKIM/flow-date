@@ -1,18 +1,17 @@
-import type { JSDateGetMethod, JSDateToMethod } from './types';
-
-type JSDateGetAndToMethods = {
-  [K in JSDateGetMethod | JSDateToMethod]: Date[K];
+type NonSetters = {
+  [K in Exclude<keyof Date, `set${string}`>]: Date[K];
 };
 
-class NativeDateAdapter implements JSDateGetAndToMethods {
-  // JS Date static methods
+class NativeDateAdapter implements NonSetters {
   static parse = Date.parse;
   static UTC = Date.UTC;
   static now = Date.now;
 
   constructor(protected _jsDate: Date) {}
 
-  // JS Date getters
+  valueOf(): number {
+    return this._jsDate.valueOf();
+  }
   getTime(): number {
     return this._jsDate.getTime();
   }
@@ -117,6 +116,15 @@ class NativeDateAdapter implements JSDateGetAndToMethods {
   }
   toJSON(key?: unknown): string {
     return this._jsDate.toJSON(key);
+  }
+
+  [Symbol.toPrimitive](hint: 'default'): string;
+  [Symbol.toPrimitive](hint: 'string'): string;
+  [Symbol.toPrimitive](hint: 'number'): number;
+  [Symbol.toPrimitive](hint: string): string | number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [Symbol.toPrimitive](hint: any): string | number {
+    return this._jsDate[Symbol.toPrimitive](hint);
   }
 }
 
