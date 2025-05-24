@@ -1,5 +1,346 @@
 import { fd, FlowDate } from './flow-date';
 
+const DATE_STRING = '2025-05-24' as const;
+
+describe('Native date methods', () => {
+  describe('toPrimitive', () => {
+    test('default', () => {
+      const flowDate = fd(DATE_STRING);
+      const nativeDate = new Date(DATE_STRING);
+      expect(flowDate + '').toBe(nativeDate + '');
+    });
+    test('string', () => {
+      const flowDate = fd(DATE_STRING);
+      const nativeDate = new Date(DATE_STRING);
+      expect(String(flowDate)).toBe(String(nativeDate));
+    });
+    test('number', () => {
+      const flowDate = fd(DATE_STRING);
+      const nativeDate = new Date(DATE_STRING);
+      expect(Number(flowDate)).toBe(Number(nativeDate));
+    });
+  });
+  describe('constructor', () => {
+    test('milliseconds', () => {
+      const flowDate = fd(1748079810464);
+      const nativeDate = new Date(1748079810464);
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('year and month', () => {
+      const flowDate = fd(2025, 1);
+      const nativeDate = new Date(2025, 1);
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('year, month, and date', () => {
+      const flowDate = fd(2025, 1, 24);
+      const nativeDate = new Date(2025, 1, 24);
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('year, month, date, hours, minutes, seconds, and ms', () => {
+      const flowDate = fd(2025, 1, 24, 12, 30, 45, 500);
+      const nativeDate = new Date(2025, 1, 24, 12, 30, 45, 500);
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('date string', () => {
+      const flowDate = fd('2025-05-24');
+      const nativeDate = new Date('2025-05-24');
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('date string with time', () => {
+      const flowDate = fd('2025-05-24T12:30:45.500');
+      const nativeDate = new Date('2025-05-24T12:30:45.500');
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('date string with time and timezone', () => {
+      const flowDate = fd('2025-05-24T12:30:45.500+09:00');
+      const nativeDate = new Date('2025-05-24T12:30:45.500+09:00');
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+    test('date string with time and timezone', () => {
+      const flowDate = fd('2025-05-24T12:30:45.500Z');
+      const nativeDate = new Date('2025-05-24T12:30:45.500Z');
+      expect(flowDate.toString()).toBe(nativeDate.toString());
+    });
+  });
+  describe('all the other methods', () => {
+    test('static methods', () => {
+      expect(FlowDate.parse(DATE_STRING)).toBe(Date.parse(DATE_STRING));
+      expect(FlowDate.UTC(2025, 4, 24)).toBe(Date.UTC(2025, 4, 24));
+      expect(FlowDate.now()).toBe(Date.now());
+    });
+    describe('all getters', () => {
+      const flowDate = fd(DATE_STRING);
+      const nativeDate = new Date(DATE_STRING);
+      test('valueOf', () => {
+        expect(flowDate.valueOf()).toBe(nativeDate.valueOf());
+      });
+      test('getTime', () => {
+        expect(flowDate.getTime()).toBe(nativeDate.getTime());
+      });
+      test('getFullYear', () => {
+        expect(flowDate.getFullYear()).toBe(nativeDate.getFullYear());
+      });
+      test('getUTCFullYear', () => {
+        expect(flowDate.getUTCFullYear()).toBe(nativeDate.getUTCFullYear());
+      });
+      test('getMonth', () => {
+        expect(flowDate.getMonth()).toBe(nativeDate.getMonth());
+      });
+      test('getUTCMonth', () => {
+        expect(flowDate.getUTCMonth()).toBe(nativeDate.getUTCMonth());
+      });
+      test('getDate', () => {
+        expect(flowDate.getDate()).toBe(nativeDate.getDate());
+      });
+      test('getUTCDate', () => {
+        expect(flowDate.getUTCDate()).toBe(nativeDate.getUTCDate());
+      });
+      test('getDay', () => {
+        expect(flowDate.getDay()).toBe(nativeDate.getDay());
+      });
+      test('getUTCDay', () => {
+        expect(flowDate.getUTCDay()).toBe(nativeDate.getUTCDay());
+      });
+      test('getHours', () => {
+        expect(flowDate.getHours()).toBe(nativeDate.getHours());
+      });
+      test('getUTCHours', () => {
+        expect(flowDate.getUTCHours()).toBe(nativeDate.getUTCHours());
+      });
+      test('getMinutes', () => {
+        expect(flowDate.getMinutes()).toBe(nativeDate.getMinutes());
+      });
+      test('getUTCMinutes', () => {
+        expect(flowDate.getUTCMinutes()).toBe(nativeDate.getUTCMinutes());
+      });
+      test('getSeconds', () => {
+        expect(flowDate.getSeconds()).toBe(nativeDate.getSeconds());
+      });
+      test('getUTCSeconds', () => {
+        expect(flowDate.getUTCSeconds()).toBe(nativeDate.getUTCSeconds());
+      });
+      test('getMilliseconds', () => {
+        expect(flowDate.getMilliseconds()).toBe(nativeDate.getMilliseconds());
+      });
+      test('getUTCMilliseconds', () => {
+        expect(flowDate.getUTCMilliseconds()).toBe(
+          nativeDate.getUTCMilliseconds(),
+        );
+      });
+      test('getTimezoneOffset', () => {
+        expect(flowDate.getTimezoneOffset()).toBe(
+          nativeDate.getTimezoneOffset(),
+        );
+      });
+
+      test('toString', () => {
+        expect(flowDate.toString()).toBe(nativeDate.toString());
+      });
+      test('toDateString', () => {
+        expect(flowDate.toDateString()).toBe(nativeDate.toDateString());
+      });
+      test('toTimeString', () => {
+        expect(flowDate.toTimeString()).toBe(nativeDate.toTimeString());
+      });
+
+      // describe('toLocaleString', () => {
+      //   test('toLocaleString()', () => {
+      //     expect(flowDate.toLocaleString()).toBe(nativeDate.toLocaleString());
+      //   });
+      //   test('toLocaleString("en-US")', () => {
+      //     expect(flowDate.toLocaleString('en-US')).toBe(
+      //       nativeDate.toLocaleString('en-US'),
+      //     );
+      //   });
+      //   test('toLocaleString(["en-US"])', () => {
+      //     expect(flowDate.toLocaleString(['en-US'])).toBe(
+      //       nativeDate.toLocaleString(['en-US']),
+      //     );
+      //   });
+      // });
+
+      test('toLocaleDateString', () => {
+        expect(flowDate.toLocaleDateString()).toBe(
+          nativeDate.toLocaleDateString(),
+        );
+      });
+      test('toLocaleTimeString', () => {
+        expect(flowDate.toLocaleTimeString()).toBe(
+          nativeDate.toLocaleTimeString(),
+        );
+      });
+      test('toUTCString', () => {
+        expect(flowDate.toUTCString()).toBe(nativeDate.toUTCString());
+      });
+      test('toISOString', () => {
+        expect(flowDate.toISOString()).toBe(nativeDate.toISOString());
+      });
+      test('toJSON', () => {
+        expect(flowDate.toJSON()).toBe(nativeDate.toJSON());
+      });
+    });
+    describe('all setters', () => {
+      test('setTime', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const TIME = 1684800000000;
+
+        nativeDate.setTime(TIME);
+
+        expect(flowDate.setTime(TIME).getTime()).toBe(nativeDate.getTime());
+      });
+      test('setMilliseconds', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MS = 123;
+
+        nativeDate.setMilliseconds(MS);
+
+        expect(flowDate.setMilliseconds(MS).getMilliseconds()).toBe(
+          nativeDate.getMilliseconds(),
+        );
+      });
+      test('setUTCMilliseconds', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MS = 123;
+
+        nativeDate.setUTCMilliseconds(MS);
+
+        expect(flowDate.setUTCMilliseconds(MS).getUTCMilliseconds()).toBe(
+          nativeDate.getUTCMilliseconds(),
+        );
+      });
+      test('setSeconds', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const SEC = 123;
+
+        nativeDate.setSeconds(SEC);
+
+        expect(flowDate.setSeconds(SEC).getSeconds()).toBe(
+          nativeDate.getSeconds(),
+        );
+      });
+      test('setUTCSeconds', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const SEC = 123;
+
+        nativeDate.setUTCSeconds(SEC);
+
+        expect(flowDate.setUTCSeconds(SEC).getUTCSeconds()).toBe(
+          nativeDate.getUTCSeconds(),
+        );
+      });
+      test('setMinutes', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MIN = 123;
+
+        nativeDate.setMinutes(MIN);
+
+        expect(flowDate.setMinutes(MIN).getMinutes()).toBe(
+          nativeDate.getMinutes(),
+        );
+      });
+      test('setUTCMinutes', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MIN = 123;
+
+        nativeDate.setUTCMinutes(MIN);
+
+        expect(flowDate.setUTCMinutes(MIN).getUTCMinutes()).toBe(
+          nativeDate.getUTCMinutes(),
+        );
+      });
+      test('setHours', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const HOUR = 123;
+
+        nativeDate.setHours(HOUR);
+
+        expect(flowDate.setHours(HOUR).getHours()).toBe(nativeDate.getHours());
+      });
+      test('setUTCHours', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const HOUR = 123;
+
+        nativeDate.setUTCHours(HOUR);
+
+        expect(flowDate.setUTCHours(HOUR).getUTCHours()).toBe(
+          nativeDate.getUTCHours(),
+        );
+      });
+      test('setDate', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const DATE = 123;
+
+        nativeDate.setDate(DATE);
+
+        expect(flowDate.setDate(DATE).getDate()).toBe(nativeDate.getDate());
+      });
+      test('setUTCDate', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const DATE = 123;
+
+        nativeDate.setUTCDate(DATE);
+
+        expect(flowDate.setUTCDate(DATE).getUTCDate()).toBe(
+          nativeDate.getUTCDate(),
+        );
+      });
+      test('setMonth', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MONTH = 123;
+
+        nativeDate.setMonth(MONTH);
+
+        expect(flowDate.setMonth(MONTH).getMonth()).toBe(nativeDate.getMonth());
+      });
+      test('setUTCMonth', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const MONTH = 123;
+
+        nativeDate.setUTCMonth(MONTH);
+
+        expect(flowDate.setUTCMonth(MONTH).getUTCMonth()).toBe(
+          nativeDate.getUTCMonth(),
+        );
+      });
+      test('setFullYear', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const YEAR = 123;
+
+        nativeDate.setFullYear(YEAR);
+
+        expect(flowDate.setFullYear(YEAR).getFullYear()).toBe(
+          nativeDate.getFullYear(),
+        );
+      });
+      test('setUTCFullYear', () => {
+        const flowDate = fd(DATE_STRING);
+        const nativeDate = new Date(DATE_STRING);
+        const YEAR = 123;
+
+        nativeDate.setUTCFullYear(YEAR);
+
+        expect(flowDate.setUTCFullYear(YEAR).getUTCFullYear()).toBe(
+          nativeDate.getUTCFullYear(),
+        );
+      });
+    });
+  });
+});
+
 describe('FlowDate', () => {
   describe('FlowDate static methods', () => {
     test('static parse should work like Date.parse', () => {
