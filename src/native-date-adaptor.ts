@@ -76,12 +76,12 @@ class NativeDateAdapter implements JSDateGetAndToMethods {
   toTimeString(): string {
     return this._jsDate.toTimeString();
   }
-  toLocalString(): string;
-  toLocalString(
+  toLocaleString(): string;
+  toLocaleString(
     locales?: string | string[],
     options?: Intl.DateTimeFormatOptions,
   ): string;
-  toLocalString(
+  toLocaleString(
     locales?: Intl.LocalesArgument,
     options?: Intl.DateTimeFormatOptions,
   ): string {
