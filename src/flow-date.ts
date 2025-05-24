@@ -96,19 +96,19 @@ class FlowDate extends NativeDateAdapter implements FlowDateSetMethods {
     this._jsDate.setUTCDate(date);
     return this;
   }
-  setMonth(month: number, date = 0): FlowDate {
+  setMonth(month: number, date = 1): FlowDate {
     this._jsDate.setMonth(month, date);
     return this;
   }
-  setUTCMonth(month: number, date = 0): FlowDate {
+  setUTCMonth(month: number, date = 1): FlowDate {
     this._jsDate.setUTCMonth(month, date);
     return this;
   }
-  setFullYear(year: number, month = 0, date = 0): FlowDate {
+  setFullYear(year: number, month = 0, date = 1): FlowDate {
     this._jsDate.setFullYear(year, month, date);
     return this;
   }
-  setUTCFullYear(year: number, month = 0, date = 0): FlowDate {
+  setUTCFullYear(year: number, month = 0, date = 1): FlowDate {
     this._jsDate.setUTCFullYear(year, month, date);
     return this;
   }
@@ -169,7 +169,7 @@ function _getJSDate(...args: FlowDateParams): Date;
 function _getJSDate(
   valueOrYear?: number | string | Date | FlowDate,
   monthIndex?: number,
-  date = 0,
+  date = 1,
   hours = 0,
   minutes = 0,
   seconds = 0,
