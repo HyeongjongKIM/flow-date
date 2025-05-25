@@ -32,11 +32,20 @@
   ],
   "scripts": {
     "build": "tsup",
-    "format": "prettier --write .",
+    "format": "prettier . --write --list-different --cache-location=.cache/prettier",
     "lint": "eslint . --fix",
-    "prepack": "yarn build",
+    "postinstall": "husky",
+    "postpack": "pinst --enable",
+    "prepack": "yarn build && pinst --disable",
     "prepublishOnly": "yarn lint && yarn test",
     "test": "vitest"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint",
+      "prettier --check --cache-location=.cache/prettier",
+      "vitest related"
+    ]
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
@@ -44,7 +53,10 @@
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-package-json": "^0.31.0",
+    "husky": "^9.1.7",
     "jsonc-eslint-parser": "^2.4.0",
+    "lint-staged": "^16.0.0",
+    "pinst": "^3.0.0",
     "prettier": "^3.5.3",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
