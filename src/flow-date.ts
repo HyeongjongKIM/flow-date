@@ -15,7 +15,7 @@ import {
   type GetYearWeekOptions,
   type GetYearWeekReturn,
 } from './utils';
-import type { JSDateSetMethod, DateUnit } from './types';
+import type { JSDateSetMethod, DateUnit, DateInstance } from './types';
 import { NativeDateAdapter } from './native-date-adaptor';
 
 type FlowDateSetMethods = {
@@ -52,64 +52,71 @@ class FlowDate extends NativeDateAdapter implements FlowDateSetMethods {
     this._jsDate = adjust(this._jsDate, amount, unit);
     return this;
   }
-  setTime(time: number): FlowDate {
-    this._jsDate.setTime(time);
+  // native setters
+  setTime(...args: Parameters<DateInstance['setTime']>): FlowDate {
+    this._jsDate.setTime(...args);
     return this;
   }
-  setMilliseconds(ms: number): FlowDate {
-    this._jsDate.setMilliseconds(ms);
+  setMilliseconds(
+    ...args: Parameters<DateInstance['setMilliseconds']>
+  ): FlowDate {
+    this._jsDate.setMilliseconds(...args);
     return this;
   }
-  setUTCMilliseconds(ms: number): FlowDate {
-    this._jsDate.setUTCMilliseconds(ms);
+  setUTCMilliseconds(
+    ...args: Parameters<DateInstance['setUTCMilliseconds']>
+  ): FlowDate {
+    this._jsDate.setUTCMilliseconds(...args);
     return this;
   }
-  setSeconds(sec: number, ms = 0): FlowDate {
-    this._jsDate.setSeconds(sec, ms);
+  setSeconds(...args: Parameters<DateInstance['setSeconds']>): FlowDate {
+    this._jsDate.setSeconds(...args);
     return this;
   }
-  setUTCSeconds(sec: number, ms = 0): FlowDate {
-    this._jsDate.setUTCSeconds(sec, ms);
+  setUTCSeconds(...args: Parameters<DateInstance['setUTCSeconds']>): FlowDate {
+    this._jsDate.setUTCSeconds(...args);
     return this;
   }
-  setMinutes(min: number, sec = 0, ms = 0): FlowDate {
-    this._jsDate.setMinutes(min, sec, ms);
+  setMinutes(...args: Parameters<DateInstance['setMinutes']>): FlowDate {
+    this._jsDate.setMinutes(...args);
     return this;
   }
-  setUTCMinutes(min: number, sec = 0, ms = 0): FlowDate {
-    this._jsDate.setUTCMinutes(min, sec, ms);
+  setUTCMinutes(...args: Parameters<DateInstance['setUTCMinutes']>): FlowDate {
+    this._jsDate.setUTCMinutes(...args);
     return this;
   }
-  setHours(hour: number, min = 0, sec = 0, ms = 0): FlowDate {
-    this._jsDate.setHours(hour, min, sec, ms);
+  setHours(...args: Parameters<DateInstance['setHours']>): FlowDate {
+    this._jsDate.setHours(...args);
     return this;
   }
-  setUTCHours(hour: number, min = 0, sec = 0, ms = 0): FlowDate {
-    this._jsDate.setUTCHours(hour, min, sec, ms);
+  setUTCHours(...args: Parameters<DateInstance['setUTCHours']>): FlowDate {
+    this._jsDate.setUTCHours(...args);
     return this;
   }
-  setDate(date: number): FlowDate {
-    this._jsDate.setDate(date);
+  setDate(...args: Parameters<DateInstance['setDate']>): FlowDate {
+    this._jsDate.setDate(...args);
     return this;
   }
-  setUTCDate(date: number): FlowDate {
-    this._jsDate.setUTCDate(date);
+  setUTCDate(...args: Parameters<DateInstance['setUTCDate']>): FlowDate {
+    this._jsDate.setDate(...args);
     return this;
   }
-  setMonth(month: number, date = 1): FlowDate {
-    this._jsDate.setMonth(month, date);
+  setMonth(...args: Parameters<DateInstance['setMonth']>): FlowDate {
+    this._jsDate.setMonth(...args);
     return this;
   }
-  setUTCMonth(month: number, date = 1): FlowDate {
-    this._jsDate.setUTCMonth(month, date);
+  setUTCMonth(...args: Parameters<DateInstance['setUTCMonth']>): FlowDate {
+    this._jsDate.setUTCMonth(...args);
     return this;
   }
-  setFullYear(year: number, month = 0, date = 1): FlowDate {
-    this._jsDate.setFullYear(year, month, date);
+  setFullYear(...args: Parameters<DateInstance['setFullYear']>): FlowDate {
+    this._jsDate.setFullYear(...args);
     return this;
   }
-  setUTCFullYear(year: number, month = 0, date = 1): FlowDate {
-    this._jsDate.setUTCFullYear(year, month, date);
+  setUTCFullYear(
+    ...args: Parameters<DateInstance['setUTCFullYear']>
+  ): FlowDate {
+    this._jsDate.setUTCFullYear(...args);
     return this;
   }
 
@@ -165,39 +172,15 @@ class FlowDate extends NativeDateAdapter implements FlowDateSetMethods {
 const fd = (...args: FlowDateParams): FlowDate =>
   new FlowDate(_getJSDate(...args));
 
-function _getJSDate(...args: FlowDateParams): Date;
-function _getJSDate(
-  valueOrYear?: number | string | Date | FlowDate,
-  monthIndex?: number,
-  date = 1,
-  hours = 0,
-  minutes = 0,
-  seconds = 0,
-  ms = 0,
-): Date {
+function _getJSDate(...args: FlowDateParams): Date {
   let newDate: Date;
-  if (typeof valueOrYear === 'number' && typeof monthIndex === 'number') {
-    newDate = new Date(
-      valueOrYear,
-      monthIndex,
-      date,
-      hours,
-      minutes,
-      seconds,
-      ms,
-    );
-  } else if (valueOrYear === undefined) {
-    newDate = new Date();
-  } else if (valueOrYear instanceof FlowDate) {
-    newDate = new Date(valueOrYear.toJSDate());
-  } else {
-    newDate = new Date(valueOrYear);
+  if (args instanceof FlowDate) {
+    newDate = args.toJSDate();
   }
-
+  newDate = new Date(...(args as ConstructorParameters<typeof Date>));
   if (!isValidDate(newDate)) {
     throw new Error('Invalid Date');
   }
-
   return newDate;
 }
 

@@ -1,6 +1,6 @@
 import { fd, FlowDate } from './flow-date';
 
-const DATE_STRING = '2025-05-24' as const;
+const DATE_STRING = '2025-05-24 12:30:45.500' as const;
 
 describe('Native date methods', () => {
   describe('toPrimitive', () => {
@@ -187,7 +187,7 @@ describe('Native date methods', () => {
 
         nativeDate.setTime(TIME);
 
-        expect(flowDate.setTime(TIME).getTime()).toBe(nativeDate.getTime());
+        expect(flowDate.setTime(TIME).toString()).toBe(nativeDate.toString());
       });
       test('setMilliseconds', () => {
         const flowDate = fd(DATE_STRING);
@@ -196,8 +196,8 @@ describe('Native date methods', () => {
 
         nativeDate.setMilliseconds(MS);
 
-        expect(flowDate.setMilliseconds(MS).getMilliseconds()).toBe(
-          nativeDate.getMilliseconds(),
+        expect(flowDate.setMilliseconds(MS).toString()).toBe(
+          nativeDate.toString(),
         );
       });
       test('setUTCMilliseconds', () => {
@@ -207,8 +207,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCMilliseconds(MS);
 
-        expect(flowDate.setUTCMilliseconds(MS).getUTCMilliseconds()).toBe(
-          nativeDate.getUTCMilliseconds(),
+        expect(flowDate.setUTCMilliseconds(MS).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setSeconds', () => {
@@ -218,9 +218,7 @@ describe('Native date methods', () => {
 
         nativeDate.setSeconds(SEC);
 
-        expect(flowDate.setSeconds(SEC).getSeconds()).toBe(
-          nativeDate.getSeconds(),
-        );
+        expect(flowDate.setSeconds(SEC).toString()).toBe(nativeDate.toString());
       });
       test('setUTCSeconds', () => {
         const flowDate = fd(DATE_STRING);
@@ -229,8 +227,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCSeconds(SEC);
 
-        expect(flowDate.setUTCSeconds(SEC).getUTCSeconds()).toBe(
-          nativeDate.getUTCSeconds(),
+        expect(flowDate.setUTCSeconds(SEC).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setMinutes', () => {
@@ -240,9 +238,7 @@ describe('Native date methods', () => {
 
         nativeDate.setMinutes(MIN);
 
-        expect(flowDate.setMinutes(MIN).getMinutes()).toBe(
-          nativeDate.getMinutes(),
-        );
+        expect(flowDate.setMinutes(MIN).toString()).toBe(nativeDate.toString());
       });
       test('setUTCMinutes', () => {
         const flowDate = fd(DATE_STRING);
@@ -251,8 +247,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCMinutes(MIN);
 
-        expect(flowDate.setUTCMinutes(MIN).getUTCMinutes()).toBe(
-          nativeDate.getUTCMinutes(),
+        expect(flowDate.setUTCMinutes(MIN).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setHours', () => {
@@ -262,7 +258,7 @@ describe('Native date methods', () => {
 
         nativeDate.setHours(HOUR);
 
-        expect(flowDate.setHours(HOUR).getHours()).toBe(nativeDate.getHours());
+        expect(flowDate.setHours(HOUR).toString()).toBe(nativeDate.toString());
       });
       test('setUTCHours', () => {
         const flowDate = fd(DATE_STRING);
@@ -271,8 +267,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCHours(HOUR);
 
-        expect(flowDate.setUTCHours(HOUR).getUTCHours()).toBe(
-          nativeDate.getUTCHours(),
+        expect(flowDate.setUTCHours(HOUR).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setDate', () => {
@@ -282,7 +278,7 @@ describe('Native date methods', () => {
 
         nativeDate.setDate(DATE);
 
-        expect(flowDate.setDate(DATE).getDate()).toBe(nativeDate.getDate());
+        expect(flowDate.setDate(DATE).toString()).toBe(nativeDate.toString());
       });
       test('setUTCDate', () => {
         const flowDate = fd(DATE_STRING);
@@ -291,8 +287,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCDate(DATE);
 
-        expect(flowDate.setUTCDate(DATE).getUTCDate()).toBe(
-          nativeDate.getUTCDate(),
+        expect(flowDate.setUTCDate(DATE).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setMonth', () => {
@@ -302,7 +298,7 @@ describe('Native date methods', () => {
 
         nativeDate.setMonth(MONTH);
 
-        expect(flowDate.setMonth(MONTH).getMonth()).toBe(nativeDate.getMonth());
+        expect(flowDate.setMonth(MONTH).toString()).toBe(nativeDate.toString());
       });
       test('setUTCMonth', () => {
         const flowDate = fd(DATE_STRING);
@@ -311,8 +307,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCMonth(MONTH);
 
-        expect(flowDate.setUTCMonth(MONTH).getUTCMonth()).toBe(
-          nativeDate.getUTCMonth(),
+        expect(flowDate.setUTCMonth(MONTH).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
       test('setFullYear', () => {
@@ -322,8 +318,8 @@ describe('Native date methods', () => {
 
         nativeDate.setFullYear(YEAR);
 
-        expect(flowDate.setFullYear(YEAR).getFullYear()).toBe(
-          nativeDate.getFullYear(),
+        expect(flowDate.setFullYear(YEAR).toString()).toBe(
+          nativeDate.toString(),
         );
       });
       test('setUTCFullYear', () => {
@@ -333,8 +329,8 @@ describe('Native date methods', () => {
 
         nativeDate.setUTCFullYear(YEAR);
 
-        expect(flowDate.setUTCFullYear(YEAR).getUTCFullYear()).toBe(
-          nativeDate.getUTCFullYear(),
+        expect(flowDate.setUTCFullYear(YEAR).toUTCString()).toBe(
+          nativeDate.toUTCString(),
         );
       });
     });

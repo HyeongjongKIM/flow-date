@@ -1,3 +1,5 @@
+import type { DateInstance } from './types';
+
 type NonSetters = {
   [K in Exclude<keyof Date, `set${string}`>]: Date[K];
 };
@@ -75,38 +77,18 @@ class NativeDateAdapter implements NonSetters {
   toTimeString(): string {
     return this._jsDate.toTimeString();
   }
-  toLocaleString(): string;
-  toLocaleString(
-    locales?: string | string[],
-    options?: Intl.DateTimeFormatOptions,
-  ): string;
-  toLocaleString(
-    locales?: Intl.LocalesArgument,
-    options?: Intl.DateTimeFormatOptions,
-  ): string {
-    return this._jsDate.toLocaleString(locales, options);
+  toLocaleString(...args: Parameters<DateInstance['toLocaleString']>): string {
+    return this._jsDate.toLocaleString(...args);
   }
-  toLocaleDateString(): string;
   toLocaleDateString(
-    locales?: string | string[],
-    options?: Intl.DateTimeFormatOptions,
-  ): string;
-  toLocaleDateString(
-    locales?: Intl.LocalesArgument,
-    options?: Intl.DateTimeFormatOptions,
+    ...args: Parameters<DateInstance['toLocaleDateString']>
   ): string {
-    return this._jsDate.toLocaleDateString(locales, options);
+    return this._jsDate.toLocaleDateString(...args);
   }
-  toLocaleTimeString(): string;
   toLocaleTimeString(
-    locales?: string | string[],
-    options?: Intl.DateTimeFormatOptions,
-  ): string;
-  toLocaleTimeString(
-    locales?: Intl.LocalesArgument,
-    options?: Intl.DateTimeFormatOptions,
+    ...args: Parameters<DateInstance['toLocaleTimeString']>
   ): string {
-    return this._jsDate.toLocaleTimeString(locales, options);
+    return this._jsDate.toLocaleTimeString(...args);
   }
   toUTCString(): string {
     return this._jsDate.toUTCString();
@@ -114,8 +96,8 @@ class NativeDateAdapter implements NonSetters {
   toISOString(): string {
     return this._jsDate.toISOString();
   }
-  toJSON(key?: unknown): string {
-    return this._jsDate.toJSON(key);
+  toJSON(...args: Parameters<DateInstance['toJSON']>): string {
+    return this._jsDate.toJSON(...args);
   }
 
   [Symbol.toPrimitive](hint: 'default'): string;
