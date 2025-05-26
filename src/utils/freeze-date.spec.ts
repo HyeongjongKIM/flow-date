@@ -5,7 +5,7 @@ describe('freezeDate', () => {
     const date = new Date(2024, 0, 1);
     const frozenDate = freezeDate(date);
     expect(() => (frozenDate as Date).setFullYear(2025)).toThrow(
-      'Cannot set property setFullYear of frozen Date object'
+      'Cannot set property setFullYear of frozen Date object',
     );
   });
 
@@ -13,7 +13,7 @@ describe('freezeDate', () => {
     const date = new Date(2024, 0, 1);
     const frozenDate = freezeDate(date);
     expect(() => (frozenDate as Date).setMonth(5)).toThrow(
-      'Cannot set property setMonth of frozen Date object'
+      'Cannot set property setMonth of frozen Date object',
     );
   });
 
@@ -51,7 +51,7 @@ describe('freezeDate', () => {
             string,
             (...args: unknown[]) => unknown
           >
-        )[method]()
+        )[method](),
       ).toThrow(`Cannot set property ${method} of frozen Date object`);
     });
   });

@@ -19,10 +19,10 @@ describe('isBetween', () => {
 
   it('should return true when date equals boundaries with inclusivity []', () => {
     expect(isBetween(minDate, minDate, maxDate, 'millisecond', '[]')).toBe(
-      true
+      true,
     );
     expect(isBetween(maxDate, minDate, maxDate, 'millisecond', '[]')).toBe(
-      true
+      true,
     );
   });
 
@@ -39,13 +39,13 @@ describe('isBetween', () => {
     const invalidDate = new Date('invalid');
 
     expect(() => isBetween(invalidDate, minDate, maxDate)).toThrow(
-      'Invalid date'
+      'Invalid date',
     );
     expect(() => isBetween(baseDate, invalidDate, maxDate)).toThrow(
-      'Invalid min'
+      'Invalid min',
     );
     expect(() => isBetween(baseDate, minDate, invalidDate)).toThrow(
-      'Invalid max'
+      'Invalid max',
     );
   });
 });

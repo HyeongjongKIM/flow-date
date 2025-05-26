@@ -9,7 +9,7 @@ function getDateFromYearWeek(
     day = 0,
     weekStart = 0,
     mode = 0,
-  }: { day?: number; weekStart?: number; mode?: number } = {}
+  }: { day?: number; weekStart?: number; mode?: number } = {},
 ): Date {
   day = _getPositiveModulo(day, 7);
   weekStart = _getPositiveModulo(weekStart, 7);
