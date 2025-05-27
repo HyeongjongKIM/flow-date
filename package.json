@@ -1,7 +1,7 @@
 {
   "name": "flow-date",
   "version": "0.0.0",
-  "description": "Javascript date wrapper",
+  "description": "Fluent and chainable Date utility for JavaScript",
   "keywords": [
     "date"
   ],
