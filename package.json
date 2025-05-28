@@ -6,11 +6,11 @@
     "date"
   ],
   "bugs": {
-    "url": "https://github.com/the-new-kim/flow-date/issues"
+    "url": "https://github.com/HyeongjongKIM/flow-date/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/the-new-kim/flow-date.git"
+    "url": "git+https://github.com/HyeongjongKIM/flow-date.git"
   },
   "license": "MIT",
   "author": "Hyeongjong Kim",
