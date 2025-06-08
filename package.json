@@ -34,10 +34,8 @@
     "build": "tsup",
     "format": "prettier . --write --list-different --cache-location=.cache/prettier",
     "lint": "eslint . --fix",
-    "postinstall": "husky",
     "postpack": "pinst --enable",
     "prepack": "yarn build && pinst --disable",
-    "prepublishOnly": "yarn lint && yarn test",
     "test": "vitest"
   },
   "lint-staged": {
