@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Explicit write permissions for GITHUB_TOKEN
+permissions:
+  contents: write
+
+env:
+  NODE_OPTIONS: --openssl-legacy-provider
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      new_version: ${{ steps.version_bump.outputs.new_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Version bump
+        id: version_bump
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/version-bump.js
+          NEW_VERSION=$(grep "^newVersion=" $GITHUB_OUTPUT | cut -d'=' -f2)
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          RELEASE_NOTES=$(sed -n '/^releaseNotes<<EOF/,/^EOF/{/^releaseNotes<<EOF/d;/^EOF/d;p;}' $GITHUB_OUTPUT)
+          if [ -n "$RELEASE_NOTES" ]; then
+            echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+            echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        if: steps.version_bump.outputs.new_version
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version_bump.outputs.new_version }}
+          name: Release v${{ steps.version_bump.outputs.new_version }}
+          body: ${{ steps.version_bump.outputs.release_notes }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: version
+    if: ${{ needs.version.outputs.new_version }}
+    runs-on: ubuntu-latest
+    outputs:
+      dist: ${{ steps.build.outputs.dist }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+          ref: refs/tags/v${{ needs.version.outputs.new_version }}
+
+      - name: Enable Corepack
+        run: |
+          sudo npm install -g corepack
+          corepack enable
+          corepack prepare yarn@4.9.1 --activate
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.12.0'
+          cache: 'yarn'
+          check-latest: true
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        id: build
+        run: |
+          yarn build
+          echo "dist=$(pwd)/dist" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  publish:
+    needs: [version, build]
+    if: ${{ needs.version.outputs.new_version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: refs/tags/v${{ needs.version.outputs.new_version }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
