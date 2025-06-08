@@ -1,11 +1,13 @@
 import { execSync } from 'child_process';
-import packageJson from '../package.json' with { type: 'json' };
 import https from 'https';
 
 const GITHUB_TOKEN = process.env.TOKEN;
 const BREAKING_CHANGE = 'breaking change';
 const FEAT = 'feat';
 const FIX = 'fix';
+const MAJOR = 'major';
+const MINOR = 'minor';
+const PATCH = 'patch';
 
 function fetchGitHubUsername(email) {
   return new Promise((resolve) => {
@@ -87,46 +89,43 @@ async function getCommitsSinceLastTag() {
     return [];
   }
 }
-function getNewVersion(commits) {
-  let [major, minor, patch] = [
-    parseInt(packageJson.version.split('.')[0]) || 0,
-    parseInt(packageJson.version.split('.')[1]) || 0,
-    parseInt(packageJson.version.split('.')[2]) || 0,
-  ];
 
-  let versionChanged = false;
+function getVersionBump(commits) {
+  let hasBreakingChange = false;
+  let hasFeature = false;
+  let hasFix = false;
 
   for (const commit of commits) {
     const { type } = commit;
 
     switch (type) {
       case BREAKING_CHANGE:
-        major++;
-        minor = 0;
-        patch = 0;
-        versionChanged = true;
+        hasBreakingChange = true;
         break;
       case FEAT:
-        minor++;
-        patch = 0;
-        versionChanged = true;
+        hasFeature = true;
         break;
       case FIX:
-        patch++;
-        versionChanged = true;
+        hasFix = true;
         break;
     }
   }
 
-  return versionChanged ? `${major}.${minor}.${patch}` : null;
+  if (hasBreakingChange) return MAJOR;
+  if (hasFeature) return MINOR;
+  if (hasFix) return PATCH;
+  return null;
 }
 
-async function updateVersion(newVersion) {
+async function bumpVersionAndPush(bumpType) {
   try {
-    execSync(
-      `npm version ${newVersion} -m "chore(release): v${newVersion}"`,
-    ).toString();
+    const newVersion = execSync(
+      `npm version ${bumpType} -m "chore(release): v%s"`,
+    )
+      .toString()
+      .trim();
     execSync('git push origin HEAD --tags');
+    return newVersion;
   } catch (error) {
     console.error('Error updating version:', error);
     process.exit(1);
@@ -210,17 +209,20 @@ async function main() {
       console.log('No new commits since last tag, skipping version bump');
       process.exit(0);
     } else {
-      const newVersion = getNewVersion(commits);
-      if (newVersion === null) {
+      const bumpType = getVersionBump(commits);
+      if (bumpType === null) {
         console.log('No version change needed, skipping version bump');
         process.exit(0);
       }
-      await updateVersion(newVersion);
+      const newVersion = await bumpVersionAndPush(bumpType);
       await writeVersionToOutput(newVersion, commits);
       process.exit(0);
     }
   } catch (error) {
-    console.error('Error determining version newVersion:', error);
+    console.error(
+      'Failed to determine version bump type from commit messages:',
+      error,
+    );
     process.exit(1);
   }
 }
